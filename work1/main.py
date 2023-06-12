@@ -8,8 +8,6 @@ import json
 
 
 
-
-
 def get_all_pages():
     headers = {
     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -125,8 +123,7 @@ def collect_data(pages_count):
 
             sub_site = 'Сайт'
             try:
-                site  = next((s for s in contacts if sub_site in s), None)
-                site = site.split(':')[1].strip()
+                site = information[4].find_all('a')[2].get('href')
             except:
                 site = 'Отсутствует'
 
@@ -143,6 +140,14 @@ def collect_data(pages_count):
                 #person = person.split(':')[1].strip()
             #except:
                 #person = 'Отсутствует'
+            try:    
+                categories_block = ''.join(information[3].text.strip())
+                categories_info = categories_block.split('Подкатегории:')
+                categories = categories_info[0].strip('Направление:').strip()
+                subcategories = categories_info[1].strip()
+            except:
+                categories = 'Отсутствуют'
+                subcategories = 'Отсутствуют'
             
             
             data = {
@@ -152,7 +157,9 @@ def collect_data(pages_count):
                 'Почта': email,
                 'Телефон': phone,
                 'Факс': fax,
-                'Сайт': site
+                'Сайт': site,
+                'Категории': categories,
+                'Подкатегории': subcategories
             }
             count += 1
             time.sleep(random.randrange(1,3))
@@ -162,7 +169,6 @@ def collect_data(pages_count):
             with open('data.json', 'w') as json_file:
                 json.dump(data_dict, json_file, indent=4, ensure_ascii=False)
             
-
 
 
 def main():
