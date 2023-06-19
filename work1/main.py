@@ -87,8 +87,11 @@ def collect_data(pages_count):
             result = q.content
             soup1 = BeautifulSoup(result, 'lxml')
             
-            name = soup1.find('body').find('h1').text
-            name = name.split('-')[0].split(',')[0]
+            try:
+                name = soup1.find('body').find('h1').text
+                name = name.split('-')[0].split(',')[0]
+            except:
+                name = 'Отсутствует'
             
             information = soup1.find_all('p')
             try:
@@ -97,8 +100,11 @@ def collect_data(pages_count):
             except:
                 description = 'Отсутствует'
 
-            contacts = (''.join(information[4].text))
-            contacts = contacts.split('\n')
+            try:
+                contacts = (''.join(information[4].text))
+                contacts = contacts.split('\n')
+            except:
+                contacts = []
 
             sub_email = 'E-mail'
             try:
